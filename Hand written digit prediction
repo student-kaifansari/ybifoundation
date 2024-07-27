@@ -1,0 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+# Load the MNIST dataset
+digits = load_digits()
+# Display the shape of the data
+print(f"Data shape: {digits.data.shape}")
+print(f"Target shape: {digits.target.shape}")
+# Display the first image and its label
+plt.gray()
+plt.matshow(digits.images[0])
+plt.show()
+print(f"Label: {digits.target[0]}")
+# Visualize the first 16 images and their labels
+fig, axes = plt.subplots(4, 4, figsize=(6, 6))
+for i, ax in enumerate(axes.flat):
+    ax.imshow(digits.images[i], cmap='gray')
+    ax.set_title(f"Label: {digits.target[i]}")
+    ax.axis('off')
+plt.show()
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(digits.data, digits.target, test_size=0.2, random_state=42)
+# Initialize and train the model
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+# Make predictions
+y_pred = clf.predict(X_test)
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+report = classification_report(y_test, y_pred)
+
+print(f'Accuracy: {accuracy}')
+print('Classification Report:')
+print(report)
